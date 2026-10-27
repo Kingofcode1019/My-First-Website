@@ -1,0 +1,6 @@
+{
+  "name": "Business Manager",
+  "description": "Production-ready Inventory Management, Order Fulfillment, Multi-Account Finance, and Business Operations Platform for modern e-commerce businesses.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

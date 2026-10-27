@@ -1,0 +1,236 @@
+{
+  "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "An e-commerce catalog item with pricing and stock levels",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string", "maxLength": 200 },
+        "sku": { "type": "string", "maxLength": 100 },
+        "category": { "type": "string", "maxLength": 100 },
+        "brand": { "type": "string", "maxLength": 100 },
+        "description": { "type": "string", "maxLength": 2000 },
+        "imageUrl": { "type": "string", "maxLength": 1000 },
+        "purchasePrice": { "type": "number" },
+        "sellingPrice": { "type": "number" },
+        "currentStock": { "type": "number" },
+        "minStockLevel": { "type": "number" },
+        "unit": { "type": "string", "maxLength": 50 },
+        "supplierId": { "type": "string", "maxLength": 128 },
+        "status": { "type": "string", "enum": ["active", "archived"] },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "name", "sku", "sellingPrice", "currentStock", "status"]
+    },
+    "InventoryMovement": {
+      "title": "InventoryMovement",
+      "description": "Audit record of any inventory stock change",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "productId": { "type": "string", "maxLength": 128 },
+        "productName": { "type": "string", "maxLength": 200 },
+        "quantity": { "type": "number" },
+        "prevStock": { "type": "number" },
+        "newStock": { "type": "number" },
+        "type": { "type": "string", "enum": ["stock_in", "stock_out", "sale", "return", "damage", "adjustment", "purchase"] },
+        "referenceId": { "type": "string", "maxLength": 128 },
+        "reason": { "type": "string", "maxLength": 500 },
+        "date": { "type": "string" },
+        "createdBy": { "type": "string", "maxLength": 128 }
+      },
+      "required": ["id", "productId", "quantity", "prevStock", "newStock", "type"]
+    },
+    "Customer": {
+      "title": "Customer",
+      "description": "E-commerce customer profile recognized by phone number",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string", "maxLength": 200 },
+        "phone": { "type": "string", "maxLength": 50 },
+        "email": { "type": "string", "maxLength": 150 },
+        "address": { "type": "string", "maxLength": 500 },
+        "city": { "type": "string", "maxLength": 100 },
+        "area": { "type": "string", "maxLength": 100 },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "totalOrders": { "type": "number" },
+        "deliveredOrders": { "type": "number" },
+        "pendingOrders": { "type": "number" },
+        "cancelledOrders": { "type": "number" },
+        "returnedOrders": { "type": "number" },
+        "totalSpent": { "type": "number" },
+        "ltv": { "type": "number" },
+        "lastOrderDate": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "name", "phone"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Customer order with line items, fulfillment status, and stock reservation tracking",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "orderNumber": { "type": "string", "maxLength": 50 },
+        "customerId": { "type": "string", "maxLength": 128 },
+        "customerName": { "type": "string", "maxLength": 200 },
+        "customerPhone": { "type": "string", "maxLength": 50 },
+        "customerAddress": { "type": "string", "maxLength": 500 },
+        "subtotal": { "type": "number" },
+        "discount": { "type": "number" },
+        "deliveryCharge": { "type": "number" },
+        "totalAmount": { "type": "number" },
+        "paymentMethod": { "type": "string", "maxLength": 50 },
+        "paymentStatus": { "type": "string", "enum": ["pending", "paid", "refunded"] },
+        "orderStatus": { "type": "string", "enum": ["pending", "confirmed", "processing", "shipped", "delivered", "returned", "cancelled"] },
+        "returnCondition": { "type": "string" },
+        "stockDeducted": { "type": "boolean" },
+        "revenueRecorded": { "type": "boolean" },
+        "orderDate": { "type": "string" },
+        "expectedDeliveryDate": { "type": "string" },
+        "deliveredDate": { "type": "string" },
+        "cancelledDate": { "type": "string" },
+        "returnedDate": { "type": "string" },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "customerId", "customerName", "customerPhone", "totalAmount", "orderStatus"]
+    },
+    "Supplier": {
+      "title": "Supplier",
+      "description": "Product vendor/supplier record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string", "maxLength": 200 },
+        "company": { "type": "string", "maxLength": 200 },
+        "phone": { "type": "string", "maxLength": 50 },
+        "email": { "type": "string", "maxLength": 150 },
+        "address": { "type": "string", "maxLength": 500 },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "totalPurchases": { "type": "number" },
+        "amountPaid": { "type": "number" },
+        "amountDue": { "type": "number" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "name", "company"]
+    },
+    "Purchase": {
+      "title": "Purchase",
+      "description": "Stock-in inventory purchase invoice",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "supplierId": { "type": "string", "maxLength": 128 },
+        "supplierName": { "type": "string", "maxLength": 200 },
+        "totalCost": { "type": "number" },
+        "paymentStatus": { "type": "string", "enum": ["paid", "due", "partial"] },
+        "accountId": { "type": "string", "maxLength": 128 },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "date": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "supplierId", "totalCost", "paymentStatus"]
+    },
+    "Account": {
+      "title": "Account",
+      "description": "Financial wallet or payment method balance (Cash, bKash, Bank)",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string", "maxLength": 100 },
+        "type": { "type": "string", "enum": ["cash", "bkash", "nagad", "rocket", "bank", "wallet", "savings", "other"] },
+        "startingBalance": { "type": "number" },
+        "currentBalance": { "type": "number" },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "name", "type", "currentBalance"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "Financial ledger record (Income, Expense, Sale, Refund, Purchase, Transfer)",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string", "enum": ["income", "expense", "sale", "refund", "purchase", "transfer"] },
+        "amount": { "type": "number" },
+        "accountId": { "type": "string", "maxLength": 128 },
+        "accountName": { "type": "string", "maxLength": 100 },
+        "targetAccountId": { "type": "string", "maxLength": 128 },
+        "targetAccountName": { "type": "string", "maxLength": 100 },
+        "category": { "type": "string", "maxLength": 100 },
+        "referenceId": { "type": "string", "maxLength": 128 },
+        "date": { "type": "string" },
+        "note": { "type": "string", "maxLength": 1000 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "type", "amount", "accountId", "date"]
+    },
+    "BusinessSettings": {
+      "title": "BusinessSettings",
+      "description": "Owner business preferences, currency, and defaults",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "businessName": { "type": "string", "maxLength": 200 },
+        "phone": { "type": "string", "maxLength": 50 },
+        "email": { "type": "string", "maxLength": 150 },
+        "address": { "type": "string", "maxLength": 500 },
+        "currency": { "type": "string", "maxLength": 10 },
+        "defaultDeliveryCharge": { "type": "number" },
+        "orderPrefix": { "type": "string", "maxLength": 20 },
+        "allowNegativeStock": { "type": "boolean" },
+        "defaultMinStockLevel": { "type": "number" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "businessName", "currency"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/products/{productId}": {
+      "schema": "Product",
+      "description": "User product catalog items"
+    },
+    "/users/{userId}/inventoryMovements/{movementId}": {
+      "schema": "InventoryMovement",
+      "description": "History of stock increases, sales, damages, and returns"
+    },
+    "/users/{userId}/customers/{customerId}": {
+      "schema": "Customer",
+      "description": "Customer profiles recognized by phone number with lifetime metrics"
+    },
+    "/users/{userId}/orders/{orderId}": {
+      "schema": "Order",
+      "description": "Customer orders with status progression and stock management"
+    },
+    "/users/{userId}/suppliers/{supplierId}": {
+      "schema": "Supplier",
+      "description": "Vendor directory and balance tracking"
+    },
+    "/users/{userId}/purchases/{purchaseId}": {
+      "schema": "Purchase",
+      "description": "Inventory stock-in purchase invoices"
+    },
+    "/users/{userId}/accounts/{accountId}": {
+      "schema": "Account",
+      "description": "Multi-wallet cash and digital banking balances"
+    },
+    "/users/{userId}/transactions/{transactionId}": {
+      "schema": "Transaction",
+      "description": "Unified financial ledger records"
+    },
+    "/users/{userId}/settings/{settingId}": {
+      "schema": "BusinessSettings",
+      "description": "Configured business settings and defaults"
+    }
+  }
+}
